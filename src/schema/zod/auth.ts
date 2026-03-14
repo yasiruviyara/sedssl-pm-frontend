@@ -18,6 +18,7 @@ export const registrationFormSchema = z.object({
   }),
   cv: z
     .any()
+    .optional()
     .refine((file) => file instanceof File, 'CV is required')
     .refine((file) => file?.type === 'application/pdf', 'Only PDF allowed'),
 });

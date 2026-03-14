@@ -83,20 +83,20 @@ export function MembershipRegistrationForm({
         throw new Error('User not authenticated');
       }
 
-      // 2. Upload CV to Supabase Storage
-      const fileExt = cv.name.split('.').pop();
-      const filePath = `${user.id}/cv_${user.id}_${Date.now()}.${fileExt}`;
+      // // 2. Upload CV to Supabase Storage
+      // const fileExt = cv.name.split('.').pop();
+      // const filePath = `${user.id}/cv_${user.id}_${Date.now()}.${fileExt}`;
 
-      const { error: uploadError } = await supabase.storage.from('sedssl').upload(filePath, cv);
+      // const { error: uploadError } = await supabase.storage.from('sedssl').upload(filePath, cv);
 
-      if (uploadError) {
-        throw new Error(`Failed to upload CV: ${uploadError.message}`);
-      }
+      // if (uploadError) {
+      //   throw new Error(`Failed to upload CV: ${uploadError.message}`);
+      // }
 
-      // 3. Get public URL
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from('cvs').getPublicUrl(filePath);
+      // // 3. Get public URL
+      // const {
+      //   data: { publicUrl },
+      // } = supabase.storage.from('sedssl').getPublicUrl(filePath);
 
       // 4. Insert membership into DB
       const { error: insertError } = await supabase.from('memberships').insert({
@@ -106,7 +106,7 @@ export function MembershipRegistrationForm({
         phone,
         gender,
         dob,
-        cv_url: publicUrl,
+        // cv_url: publicUrl,
         status: 'pending',
       });
 

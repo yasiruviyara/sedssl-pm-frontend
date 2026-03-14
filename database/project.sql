@@ -6,7 +6,7 @@ CREATE TYPE project_status_enum AS ENUM ('pending', 'to_do', 'in_progress', 'fin
 -- Main Projects Table
 CREATE TABLE projects (
   id BIGSERIAL PRIMARY KEY,
-  title TEXT NOT NULL,
+  title TEXT NOT NULL, 
   description TEXT,
   timeline_start DATE NOT NULL,
   timeline_end DATE NOT NULL,
