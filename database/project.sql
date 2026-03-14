@@ -1,35 +1,12 @@
-
-CREATE TYPE gender_enum AS ENUM ('male', 'female', 'other');
-CREATE TYPE account_status_enum AS ENUM ('pending', 'under_review', 'approved', 'rejected');
-CREATE TYPE role_enum AS ENUM ('member', 'chapter-lead', 'division-head', 'board-member', 'admin');
-
-CREATE TABLE members (
-  id BIGSERIAL PRIMARY KEY,
-  user_id UUID UNIQUE NOT NULL REFERENCES auth.users(id),
-  initials TEXT NOT NULL,
-  full_name TEXT NOT NULL,
-  phone TEXT NOT NULL,
-  gender gender_enum NOT NULL,
-  dob DATE NOT NULL,
-  cv TEXT NOT NULL,
-  avatar TEXT,
-  avatar_visibility TEXT CHECK (avatar_visibility IN ('public', 'private')) DEFAULT 'public',
-  account_status account_status_enum DEFAULT 'pending',  
-  submitted_at TIMESTAMPTZ DEFAULT now(),
-  reviewed_at TIMESTAMPTZ,
-  chapter TEXT, -- there is one value in an array
-  division TEXT, -- there is one value in an array
-  role role_enum DEFAULT 'member',
-  position TEXT, -- there is one value in an array
-);
-
+-- Enums
 CREATE TYPE proposer_type_enum AS ENUM ('chapter', 'division');
 CREATE TYPE proposal_status_enum AS ENUM ('draft', 'submitted', 'under_review', 'returned', 'approved', 'rejected');
 CREATE TYPE project_status_enum AS ENUM ('pending', 'to_do', 'in_progress', 'finalizing', 'completed', 'stopped', 'cancelled');
 
+-- Main Projects Table
 CREATE TABLE projects (
   id BIGSERIAL PRIMARY KEY,
-  title TEXT NOT NULL,
+  title TEXT NOT NULL, 
   description TEXT,
   timeline_start DATE NOT NULL,
   timeline_end DATE NOT NULL,
@@ -51,6 +28,7 @@ CREATE TABLE projects (
   updated_at TIMESTAMPTZ DEFAULT now()
 );
 
+-- project Members
 CREATE TABLE project_members (
   id BIGSERIAL PRIMARY KEY,
   project_id BIGINT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
@@ -59,6 +37,7 @@ CREATE TABLE project_members (
   is_active BOOLEAN DEFAULT TRUE
 );
 
+-- Comments
 CREATE TABLE project_comments (
   id BIGSERIAL PRIMARY KEY,
   project_id BIGINT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
@@ -67,6 +46,7 @@ CREATE TABLE project_comments (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
+-- Feedbacks
 CREATE TABLE project_feedbacks (
   id BIGSERIAL PRIMARY KEY,
   project_id BIGINT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
